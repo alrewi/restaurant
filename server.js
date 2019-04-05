@@ -5,7 +5,7 @@ const app = express();
 var PORT = process.env.PORT || 3000;
 
 var reservations =[]
-var waitlist = []
+var waitlists = []
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -15,27 +15,37 @@ app.use(express.json());
 
 //Display pages
 app.get("/reservation-view", function(req, res){
-    res.sendFile(path.join(__dirname, "table.html"))
+    res.sendFile(path.join(__dirname, "html/tables.html"))
 });
 
 
 app.get("/reservation-form", function(req, res){
-    res.sendFile(path.join(__dirname, "form.html"))
+    res.sendFile(path.join(__dirname, "html/reservations.html"))
 });
 
 app.get("*", function(req, res){
-    res.sendFile(path.join(__dirname, "home.html"))
+    res.sendFile(path.join(__dirname, "html/home.html"))
 });
 
+//Getting reservation list
 app.get("/api/reservation", function(req, res){
     return res.json(reservations)
 });
 
+app.get("/api/waitlist", function(req, res){
+    return res.json(waitlists)
+});
 
 
-app.post("/reservation-form", function(req, res){
+
+app.post("/api/reservation", function(req, res){
     console.log(res.body)
     var request = res.body;
+    if(reservations.length > 5){
+        waitlists.push(request)
+    }else{
+        reservations.push(request)
+    }
 
 
 });
