@@ -4,20 +4,18 @@ const path = require("path");
 const app = express();
 var PORT = process.env.PORT || 3000;
 
-var reservation =[]
+var reservations =[]
+var waitlist = []
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Route name
-app.get("/", function(req, res){
-    res.sendFile(path.join(__dirname, "home.html"))
-});
 
-
+//Display pages
 app.get("/reservation-view", function(req, res){
-    res.sendFile(path.join(__dirname, "view.html"))
+    res.sendFile(path.join(__dirname, "table.html"))
 });
 
 
@@ -25,11 +23,23 @@ app.get("/reservation-form", function(req, res){
     res.sendFile(path.join(__dirname, "form.html"))
 });
 
+app.get("*", function(req, res){
+    res.sendFile(path.join(__dirname, "home.html"))
+});
+
+app.get("/api/reservation", function(req, res){
+    return res.json(reservations)
+});
+
+
+
 app.post("/reservation-form", function(req, res){
-    var reservation = res.body;
+    console.log(res.body)
+    var request = res.body;
 
 
 });
+
 
 app.listen(PORT, function() {
     console.log("App listening on PORT " + PORT);
